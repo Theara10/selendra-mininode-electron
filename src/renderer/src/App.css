@@ -1,0 +1,1170 @@
+.App {
+  padding: 0  20px 0 20px;
+  /* background-color: var(--bg-color); */
+  height: 100vh;
+}
+p {
+  margin: 0px !important;
+}
+
+:root {
+  --main-color:#f37747 !important;
+  --primary-gradient: linear-gradient(270deg, #f37747 0%, #f39b0b 100%);
+  --bg-color: rgb(245, 244, 244)!important;
+  --sidebar: linear-gradient(
+    180deg,
+    rgba(238, 237, 255, 0.53) 0%,
+    rgba(250, 245, 255, 0.38) 46.35%,
+    rgba(255, 255, 255, 0.71) 100%
+  );
+}
+
+
+.stop-node {
+  display: flex;
+  justify-content: space-between;
+}   
+
+/* ==========SIDEBAR========= */
+
+.wrapper {
+  margin-left: 250px;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  /* background: linear-gradient(135deg, #13f1fc 0%, #0470dc 100%) !important; */
+  animation: gradient 15s ease infinite;
+  /* background-color: var(--bg-color) !important; */
+}
+.container {
+  max-width: 60rem !important;
+  margin: 0 auto !important;
+}
+.wrapper .wrapper-sub-background {
+  min-height: 100vh;
+  padding: 50px 0;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  animation: gradient 15s ease infinite;
+  /* background-color: rgb(231, 231, 231) !important */
+}
+.sidebar-sider .ant-layout-sider-children,
+.sidebar-menu {
+  background-color: white !important;
+}
+.sidebar-sider .ant-menu-item-selected::after {
+  height: 25px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+}
+
+.ant-row {
+  background-color: white !important;
+}
+
+.sidebar-icon {
+  filter: grayscale(100%);
+}
+
+.ant-menu-item .ant-menu-item-selected > img{
+  filter: grayscale(100%) !important;
+ 
+}
+
+.password-input {
+  height: 50px !important;
+  border: 1px solid lightgrey !important;
+  /* background-color: red !important; */
+}
+/* ----------Running node -------- */
+.running-node-container {
+  padding-top: 20px;
+}
+.running-node-box {
+  background-color: vsar(--bg-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center ;
+  border-radius: 16px;
+  width: 100%;  
+  padding: 10px 20px;
+ margin-top: 10px;
+}
+.running-node-box-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.stop_icon {
+  height: 16px;
+  width: 16px;
+  border-radius: 5px;
+  background-color: var(--main-color);
+  margin-right: 10px;
+}
+
+.running-node-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 30px;
+ 
+}
+
+.secondary-btn, .ant-btn.ant-btn-default {
+  padding: 5px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 1px solid lightgray;
+}
+.ant-btn.ant-btn-default:hover , .running-node-button:hover{
+  color: var(--main-color) !important;
+  border-color:var(--main-color) !important;
+}
+.running-node-stop-button:hover {
+ background-color: var(--main-color);
+}
+.running-node-stop-button:hover p{
+ color: white !important;
+}
+.running-node-stop-button:hover div{
+  background-color: white !important;
+}
+
+.ant-form-item-control-input-content{
+  flex: auto !important;
+  max-width: 100% !important;
+}
+.node-status {
+  margin-right: 20px !important;
+  
+}
+.node-active {
+  color: green !important;
+}
+.node-inactive {
+  color:  red !important;
+}
+.session-key-container {
+  background-color: var(--bg-color);
+  border-radius: 10px;
+  margin-top: 10px;
+}
+.session-key {
+  word-wrap: break-word;
+  padding: 10px;
+  opacity: 80%;
+}
+.session-key-icon {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 10px!important   ;
+  border-top: 1px solid rgb(225, 224, 224);
+}
+
+.copy-icon {
+  margin-right: 10px;
+}
+
+/* =======ANT MODAL======= */
+
+.ant-modal-header {
+  padding: 16px 24px;
+  color: rgba(0, 0, 0, 0.85);
+  background: #fff;
+  border-bottom:none !important;
+  border-radius: 20px 20px 0 0 !important;
+}
+.ant-modal-body {
+  padding: 0px 20px 20px 20px !important;
+}
+.ant-modal-footer {
+  display: none !important;
+}
+
+.running-node-status-modal {
+  padding: 20px !important;
+  text-align: center !important;
+}
+
+/* =======ANT CARD ======== */
+.running-node-card {
+  border-radius: 16px !important;
+  margin-top: 10px !important;
+}
+
+/* ========ANT ALERT======== */
+.ant-alert {
+  border-radius: 10px !important;
+}
+
+/* ==============BITRIEL CSS================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap');
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Ubuntu', sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  overflow-x: hidden !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+label,
+i {
+  color: var(--text-color) !important;
+  margin: 0 !important;
+}
+
+.toast-styling {
+  color: var(--text-color);
+  background-color: var(--foreground);
+  min-width: 140px;
+  min-height: 48px;
+  padding: 8px 16px;
+}
+
+.page-not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 550px;
+}
+.page-not-found h2 {
+  color: #fff;
+  font-size: 80px !important;
+  font-weight: 700;
+  margin-bottom: 0px !important;
+  line-height: 80px !important;
+  text-shadow: 0 1px 0 #cccccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbbbbb,
+    0 4px 0 #b9b9b9, 0 5px 0 #aaaaaa, 0 6px 1px rgba(0, 0, 0, 0.1),
+    qety 0 0 5px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.3),
+    0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.25),
+    0 10px 10px rgba(0, 0, 0, 0.2), 0 20px 20px rgba(0, 0, 0, 0.15);
+}
+.page-not-found p {
+  font-size: 24px;
+  max-width: 500px;
+  margin-top: 30px !important;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/*===>> NOT AUTHENTICATED <<===*/
+.index-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--foreground);
+}
+.logo {
+  height: 55px;
+  margin-top: 20px;
+}
+.index-top-section {
+  /* background-image: var(--background-home-image); */
+  background: var(--primary-gradient);
+  min-height: 500px;
+  background-size: cover;
+  background-position: center;
+}
+.index-container {
+  max-width: 74rem;
+  margin: 0px auto;
+  height: 850px !important;
+}
+.index-container2 {
+  max-width: 74rem;
+  margin: 0px auto;
+}
+.bitriel-mock-up {
+  width: 900px;
+  position: absolute;
+  right: -300px;
+  /* top: 40px; */
+}
+.bitriels-apps {
+  width: 1200px;
+  position: relative;
+}
+.apps-title-container {
+  width: 70%;
+  margin: auto;
+  text-align: center;
+  justify-content: center;
+}
+.coin-transparent {
+  position: absolute;
+  width: 676px;
+  left: -600px;
+  opacity: 0.1;
+}
+.create-wallet-img {
+  height: 40px;
+}
+.welcome {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 80px 0;
+  width: 75%;
+}
+.welcome-message {
+  font-size: 48px;
+  color: #fff;
+  font-weight: bold;
+}
+.welcome-sub-message {
+  font-size: 24px;
+  color: #fff !important;
+  margin-top: 10px !important;
+}
+.create-restore-buttons {
+  padding-top: 50px;
+}
+.apps-section {
+  /* width: 70%; */
+  min-height: 34vh;
+  font-size: 18px;
+  margin-top: 60px !important;
+  padding: 120px 0px;
+}
+.apps-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.index-footer {
+  font-size: 16px;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  top: 0;
+}
+.index-footer i {
+  font-size: 30px;
+  margin-right: 20px !important;
+  cursor: pointer;
+  transition: 0.3s;
+  color: var(--text-color);
+}
+.index-footer i:hover {
+  color: #444444;
+}
+
+/*===>> END NOT AUTHENTICATED <<===*/
+/*===>> SIDEBAR <<===*/
+.wrapper {
+  margin-left: 250px;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  /* background: linear-gradient(135deg, #13f1fc 0%, #0470dc 100%) !important; */
+  animation: gradient 15s ease infinite;
+}
+.container {
+  max-width: 60rem !important;
+  margin: 0 auto !important;
+}
+.wrapper .wrapper-sub-background {
+  min-height: 100vh;
+  padding: 50px 0;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  animation: gradient 15s ease infinite;
+  /* background-color: #f0f2f5; */
+}
+.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+  background: var(--menu-gradient) !important;
+}
+.ant-layout-sider {
+  background: var(--sidebar) !important;
+  box-shadow: 2px 4px 4px rgba(79, 52, 137, 0.25) !important;
+}
+.ant-menu-item {
+  height: 55px !important;  
+}
+/* .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+  background: none !important;
+} */
+
+/* .sidebar-sider .ant-layout-sider-children {
+  border-radius: 0 30px 30px 0 !important;
+} */
+.sidebar-sider .ant-layout-sider-children,
+.sidebar-menu {
+  background-color: var(--sidebar) !important;
+}
+.sidebar-sider .ant-menu-item-selected::after {
+  height: 25px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+}
+.sidebar-logo {
+  width: auto;
+  height: 40px;
+  margin: 20px 0;
+}
+.sidebar-itemTitle {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text-gray) !important;
+
+}
+.sidebar-top {
+  -webkit-box-flex: 1 !important;
+  -ms-flex: 1 1 !important;
+  flex: 1 1 !important;
+  min-height: 55vh;
+}
+.sidebar-itemActive {
+  color: #f37747 !important;
+}
+.sidebar-itemIcon {
+  filter: grayscale(100%);
+}
+.mobile-drawer-header {
+  padding: 15px 15px;
+  padding-top: 8px;
+  background-color: var(--background);
+  display: none !important;
+}
+.ant-drawer-body {
+  padding: 0 !important;
+}
+
+/*===>> END SIDEBAR <<===*/
+/*===>> HOME <<===*/
+.home-title {
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 38.832px;
+}
+.home-spacing {
+  padding: 16px 0;
+}
+.home-btn-wrapper img {
+  padding: 10px;
+  border-radius: 33px;
+  height: 90px;
+  width: 90px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.home-btn-wrapper:hover {
+  filter: brightness(0.8);
+  -webkit-filter: brightness(0.8);
+}
+.home-connect-evm img {
+  background-color: #03a8f421;
+}
+.home-connect-evm p {
+  font-weight: 500;
+  color: #03a9f4 !important;
+}
+.home-create-wallet img {
+  background-color: var(--orange-gradient-icon);
+}
+.home-create-wallet p {
+  font-weight: 500;
+  color: var(--primary) !important;
+}
+.home-restore-wallet img {
+  background-color: var(--red-gradient-icon);
+}
+.home-restore-wallet p {
+  color: var(--secondary) !important;
+}
+.modal-select-account-item {
+  background-color: var(--background);
+  border: 2px solid transparent;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: 0.5s all;
+  padding: 14px 16px;
+  margin: 8px 0;
+}
+.modal-select-account-item:hover {
+  border-color: #03a9f4;
+}
+.modal-select-account-item p {
+  font-weight: 500;
+}
+
+.wallet-username {
+  text-overflow: ellipsis; /* IE, Safari (WebKit) */
+  overflow: hidden; /* don't show excess chars */
+  white-space: nowrap; /* force single line */
+  max-width: 80px;
+}
+/*===>> END HOME <<===*/
+/*===>> WALLET <<===*/
+.wallet-tabs {
+  text-align: center;
+  border-radius: 18px;
+  transition: 0.3s all;
+  padding: 10px;
+  cursor: pointer;
+}
+.wallet-tabs-active {
+  background-color: var(--active-color);
+  font-weight: bold;
+}
+.receive-address-container {
+  background-color: var(--background);
+  padding: 16px;
+  border-radius: 8px;
+}
+.receive-address {
+  font-size: 16px;
+  font-weight: 500;
+  word-break: break-all;
+}
+/*===>> END WALLET <<===*/
+/*===>> CREATE WALLET <<===*/
+.each-mnemonic-word {
+  background-color: #03a9f4;
+  border-radius: 8px;
+  padding: 4px 8px;
+  margin: 4px;
+}
+.each-mnemonic-word p {
+  font-size: 16px;
+  font-weight: 500;
+  color: #f5f5f5 !important;
+}
+.create-wallet-step .ant-steps-item-title {
+  color: var(--text-color) !important;
+}
+.ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-icon {
+  background: var(--primary-gradient) !important;
+  border: 1px solid var(--primary) !important;
+}
+
+/*===>> END CREATE WALLET <<===*/
+/*===>> RESTORE WALLET <<===*/
+.restore-wallet-card {
+  font-size: 16px;
+  text-align: center;
+  border-radius: 18px;
+  border: 2px solid var(--primary);
+  cursor: pointer;
+  transition: 0.2s;
+  padding: 10px 20px;
+  margin: 16px;
+  margin-bottom: 20px;
+}
+.restore-wallet-card-active {
+  background-color: rgba(243, 119, 71, 0.21);
+}
+.restore-wallet-btnUpload {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--primary) !important;
+  border: 2px solid var(--primary);
+  border-radius: 16px;
+  cursor: pointer;
+  padding: 10px;
+}
+/*===>> END RESTORE WALLET <<===*/
+/*===>> SETTING <<===*/
+.setting__padding {
+  width: 60%;
+  margin: 0 auto;
+}
+.setting-social-media {
+  margin-top: 20px;
+  font-size: 26px;
+}
+.setting-social-media i {
+  margin-right: 15px !important;
+  color: var(--text-color);
+}
+/*===>> END SETTING <<===*/
+/*===>> EARN <<===*/
+.earn-menu-item {
+  height: 100%;
+  transition: 0.4s all;
+  cursor: pointer !important;
+}
+
+.earn-menu-item:hover {
+  transform: scale(1.03);
+}
+/*===>> END EARN <<===*/
+/*===>> STAKING <<===*/
+.staking-controller {
+  border: 2px solid var(--text-color);
+  border-radius: 8px;
+  padding: 8px;
+  transition: 0.5s all;
+  cursor: pointer;
+}
+.staking-controller h3 {
+  margin-top: 8px !important;
+}
+.staking-controller:hover {
+  border-color: #03a9f4;
+}
+.staking-rewardOption {
+  border: 2px solid var(--text-color);
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.5s all;
+}
+.staking-rewardOption:hover {
+  border-color: #03a9f4;
+}
+.staking-rewardOption:hover h3 {
+  color: #03a9f4 !important;
+}
+.staking-nominate {
+  background-color: var(--background);
+  padding: 8px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  transition: all 0.5s;
+  cursor: pointer;
+  border: 1.6px solid transparent;
+}
+.staking-nominate:hover {
+  border: 1.6px solid #03a9f4;
+}
+.staking-table {
+  color: var(--text-color);
+  width: 100%;
+}
+.staking-table th,
+.staking-table td {
+  padding: 0.45rem;
+  word-break: break-all;
+}
+.staking-table tr td:first-child {
+  width: 30%;
+  font-weight: bold;
+}
+.staking-payee {
+  height: 40px;
+  border: 2px solid #03a9f4;
+  border-radius: 8px;
+  padding: 8px 16px;
+  margin: 8px 0;
+}
+.staking-payeeItem {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 8px 16px;
+  margin: 8px 0;
+  cursor: pointer;
+  transition: 0.4s all;
+}
+.staking-bondUnbond {
+  transition: all 0.5s;
+  cursor: pointer;
+}
+.staking-bondUnbond:hover {
+  filter: brightness(0.8);
+  -webkit-filter: brightness(0.8);
+}
+/*===>> END STAKING <<===*/
+/*===>> LOADING <<===*/
+.connecting-node {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background-color: #22272e;
+}
+.about a {
+  color: var(--text-gray) !important;
+  font-weight: 400;
+  cursor: pointer;
+}
+.about a:hover {
+  color: var(--primary) !important;
+}
+
+.dark-mode {
+  color: var(--text-gray) !important;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 22px;
+  position: relative;
+  top: -6px;
+}
+.about-container {
+  padding-top: 150px;
+}
+/*===>> END LOADING <<===*/
+
+.connect-evm {
+  display: grid;
+  justify-content: end;
+  align-items: flex-end;
+  margin-right: 180px;
+  margin-bottom: 30px;
+}
+
+.account-active {
+  background-color: #03a9f4;
+  padding: 1px;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  position: absolute;
+  right: 15px;
+  top: -9px;
+  border: 2px solid #fff;
+  animation: online 2s infinite;
+}
+
+@-webkit-keyframes online {
+  0% {
+    -webkit-box-shadow: 0 0 0 0 #03a9f4;
+  }
+  70% {
+    -webkit-box-shadow: 0 0 0 8px rgba(204, 169, 44, 0);
+  }
+  100% {
+    -webkit-box-shadow: 0 0 0 0 rgba(204, 169, 44, 0);
+  }
+}
+@keyframes online {
+  0% {
+    -moz-box-shadow: 0 0 0 0 #03a9f4;
+    box-shadow: 0 0 0 0 #03a9f4;
+  }
+  70% {
+    -moz-box-shadow: 0 0 0 8px rgba(204, 169, 44, 0);
+    box-shadow: 0 0 0 8px rgba(204, 169, 44, 0);
+  }
+  100% {
+    -moz-box-shadow: 0 0 0 0 rgba(204, 169, 44, 0);
+    box-shadow: 0 0 0 0 rgba(204, 169, 44, 0);
+  }
+}
+
+@-webkit-keyframes staking {
+  0% {
+    -webkit-box-shadow: 0 0 0 0 #f27649;
+  }
+  70% {
+    -webkit-box-shadow: 0 0 0 8px rgba(204, 169, 44, 0);
+  }
+  100% {
+    -webkit-box-shadow: 0 0 0 0 rgba(204, 169, 44, 0);
+  }
+}
+@keyframes staking {
+  0% {
+    -moz-box-shadow: 0 0 0 0 #f27649;
+    box-shadow: 0 0 0 0 #f27649;
+  }
+  70% {
+    -moz-box-shadow: 0 0 0 8px rgba(204, 169, 44, 0);
+    box-shadow: 0 0 0 8px rgba(204, 169, 44, 0);
+  }
+  100% {
+    -moz-box-shadow: 0 0 0 0 rgba(204, 169, 44, 0);
+    box-shadow: 0 0 0 0 rgba(204, 169, 44, 0);
+  }
+}
+
+.home-wallet-container {
+  display: grid;
+  grid-template-columns: auto auto;
+  place-items: center;
+}
+.swicth-icon,
+.copy-icon {
+  width: 25px;
+  height: 25px;
+  border-radius: 10px;
+  padding-top: 5px;
+}
+.swicth-icon {
+  background: var(--orange-gradient-icon) !important;
+  border: 1px solid var(--primary);
+}
+
+.copy-icon {
+  background: var(--red-gradient-icon) !important;
+  border: 1px solid var(--secondary);
+}
+.copy-icon span {
+  color: var(--secondary) !important;
+}
+.home-buttons-options-container {
+  padding-top: 20px;
+}
+.address-name {
+  font-size: 24px;
+}
+.home-account-type {
+  font-size: 14px !important;
+}
+
+.home-token-list {
+  display: flex;
+  justify-content: space-between;
+}
+.connect__wallet {
+  cursor: pointer;
+}
+.my-portfolio {
+  width: 110px;
+  height: 110px;
+  padding: 20px;
+  border-radius: 45px;
+  background: var(--orange-gradient-icon);
+}
+.portfolio-money {
+  font-size: 40px !important;
+  color: var(--primary) !important;
+}
+.portfolio-equalto {
+  font-size: 14px !important;
+  color: var(--text-gray) !important;
+}
+.portfolio-sel-transparent {
+  width: 150px !important;
+  position: absolute;
+  opacity: 0.1;
+  right: 0px;
+  top: 5px;
+}
+.portfolio-visible-wallet {
+  position: relative;
+  top: -20px;
+  cursor: pointer;
+  font-size: 20px;
+  color: var(--primary) !important;
+}
+.portfolio-staking {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+}
+.portfolio-staking-token {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 10px;
+}
+.portfolio-staking-token p {
+  font-size: 14px !important;
+}
+.portfolio-overall {
+  color: var(--primary) !important;
+}
+.portfolio-validator-name {
+  color: var(--text-gray) !important;
+  font-size: 14px !important;
+  margin-left: 10px;
+}
+.graph-container {
+  width: 300px;
+  margin: auto;
+}
+
+.react-qrcode-logo {
+  border-radius: 16px !important;
+}
+.swap-icon {
+  height: 60px;
+  transform: rotate(90deg);
+  cursor: pointer;
+}
+.swap-icon:hover {
+  filter: brightness(1.1);
+  -webkit-filter: brightness(1.1);
+}
+.swap-form-container {
+  padding: 30px 120px;
+}
+.swap-button {
+  padding-top: 40px !important;
+}
+.token-slider-amount {
+  width: 80% !important;
+  position: relative;
+  top: -20px;
+  left: 5px;
+}
+.liquidity-container {
+  margin-top: 30px;
+}
+.swap-rates {
+  color: var(--secondary) !important;
+}
+
+.staking-overview {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  column-gap: 150px !important;
+}
+.is-staking {
+  font-size: 20px !important;
+  color: var(--primary) !important;
+  animation: staking 2s infinite;
+  border-radius: 50px;
+  width: 15px;
+  height: 15px;
+}
+.details {
+  display: flex;
+  flex-direction: row;
+  column-gap: 5px;
+  justify-content: center;
+  cursor: pointer;
+}
+.cards-footer {
+  background: var(--orange-gradient-icon) !important;
+  position: absolute;
+  bottom: 0px;
+  height: 50px;
+  width: 95% !important;
+  border-radius: 0px 0px 16px 16px;
+  text-align: center;
+  justify-content: center;
+  padding-top: 12px;
+  font-size: 16px !important;
+  font-weight: 600;
+}
+.cards-footer2 {
+  background: var(--orange-gradient-icon) !important;
+  position: absolute;
+  bottom: 0px;
+  height: 50px;
+  width: 93% !important;
+  border-radius: 0px 0px 16px 16px;
+  text-align: center;
+  justify-content: center;
+  padding-top: 12px;
+  font-size: 16px !important;
+  font-weight: 600;
+}
+.cards-footer h5 {
+  color: var(--primary) !important;
+  font-weight: 600;
+}
+.card-background-launchpad {
+  position: relative;
+  margin: 0 !important;
+  padding: 0;
+  width: 100% !important;
+  left: -34px;
+  top: -38px;
+}
+.background-launchpad-img {
+  height: 250px !important;
+  width: 467px !important;
+  border-radius: 16px 16px 0px 0px;
+}
+.launchpad-logo-container {
+  position: absolute;
+  top: 200px;
+  left: 51%;
+  margin-left: -50px;
+}
+.launchpad-logo {
+  width: 90px;
+  height: 90px;
+  border-radius: 100px;
+  background-color: var(--background);
+  border: 2px solid var(--secondary);
+  padding: 5px;
+}
+.launchpad-bio {
+  color: var(--secondary) !important;
+  font-size: 14px !important;
+}
+.launchpad-desc {
+  color: var(--text-gray) !important;
+  padding-top: 10px !important;
+}
+.launchpad-desc-container {
+  margin-bottom: 30px;
+}
+
+.launchpad-desc-container p {
+  color: var(--text-gray) !important;
+  padding-top: 10px !important;
+}
+
+.launchpad-banner {
+  height: 340px;
+  width: 100%;
+  border-radius: 16px;
+}
+.raise-goal {
+  color: var(--primary) !important;
+}
+
+/* ================responsive ================ */
+
+@media screen and (max-width: 1600px) {
+  .coin-transparent {
+    position: absolute;
+    left: -300px;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .bitriel-mock-up {
+    width: 600px;
+    position: absolute;
+    right: -160px;
+  }
+  .index-container {
+    padding: 20px 120px;
+    height: 747px !important;
+  }
+  .welcome {
+    width: 93%;
+  }
+  .bitriels-apps {
+    width: 900px;
+    margin: auto;
+    display: grid;
+  }
+}
+
+@media screen and (max-width: 991px) {
+  .wrapper {
+    margin: 0;
+  }
+  .sidebar-top {
+    min-height: initial;
+  }
+  .bitriel-mock-up {
+    width: 460px;
+    position: absolute;
+    right: -100px;
+    top: 150px;
+  }
+  .index-container {
+    padding: 20px 50px;
+    height: 747px !important;
+  }
+  .welcome {
+    width: 100%;
+  }
+  .bitriels-apps {
+    width: 600px;
+    margin: auto;
+    display: grid;
+  }
+  .welcome-message {
+    font-size: 40px;
+  }
+  .logo {
+    height: 45px !important;
+  }
+}
+@media screen and (max-width: 768px) {
+  .container {
+    padding: 0 16px;
+  }
+  .mobile-drawer-header {
+    display: block;
+  }
+  .index-container {
+    padding: 0 24px;
+  }
+  .welcome-message {
+    font-size: 40px;
+  }
+  .apps-section {
+    width: 80%;
+  }
+  .index-footer {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .welcome-message {
+    font-size: 26px;
+  }
+  .welcome-sub-message {
+    font-size: 16px;
+  }
+  .bitriel-mock-up {
+    width: 300px;
+    position: absolute;
+    right: 10px;
+    top: 18px;
+  }
+  .create-wallet-img {
+    height: 30px;
+  }
+  .apps-section {
+    width: 100%;
+    padding-top: 20px;
+  }
+  .apps-section h3 {
+    font-size: 16px !important;
+  }
+  .bitriels-apps {
+    width: 350px;
+    margin-top: 50px;
+  }
+  .apps-title-container {
+    width: 89%;
+  }
+  .coin-transparent {
+    display: none;
+  }
+  .welcome {
+    margin: 0;
+    padding: 30px 0px;
+  }
+  .logo {
+    height: 40px !important;
+  }
+}
