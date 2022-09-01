@@ -1,6 +1,15 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "../App.css";
-import { Button, Spin, Modal, Input, Card, Form, message, Alert } from "antd";
+import {
+  Button,
+  Spin,
+  Modal,
+  Input,
+  Form,
+  message,
+  Alert,
+  Popover,
+} from "antd";
 import {
   CopyOutlined,
   CloseOutlined,
@@ -8,20 +17,25 @@ import {
   EyeTwoTone,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-// import sel from "../public/sel-logo.png";
+import sel from "../assets/sel-icon.svg";
 
 import LayoutComponent from "../components/Layout";
+import Card from "../components/Card";
 
 function RunNode() {
   const [name, setName] = useState("");
   const [passwd, setPasswd] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [validationMessage, setValidationMessage] = useState("");
+  const [passwordValidationMessage, setPasswordValidationMessage] =
+    useState("");
+  const [nodeNameValidationMessage, setNodeNameValidationMessage] =
+    useState("");
   const [status, setStatus] = useState("");
   const [isDone, setIsDone] = useState();
   const [stopNode, setStopNode] = useState(true);
   const [sessionKey, setSessionKey] = useState("");
-  const [loadingNode, setLoadingNode] = useState(true);
+  const [loadingNode, setLoadingNode] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const checkContainerStatus = useCallback(() => {}, [isDone, loadingNode]);
 
@@ -29,7 +43,7 @@ function RunNode() {
     window.bridge.getNodeActiveStatus((event, args) => {
       var isTrue = JSON.parse(args);
       setIsDone(isTrue);
-      setLoadingNode(localStorage.getItem("loadingNode"));
+      // setLoadingNode(localStorage.getItem("loadingNode"));
     });
   }, [setIsDone, setLoadingNode]);
 
@@ -43,7 +57,7 @@ function RunNode() {
   useEffect(() => {
     if (status.status === "RUNNING") {
       setLoadingNode(false);
-      localStorage.setItem("loadingNode", false);
+      // localStorage.setItem("loadingNode", false);
       message.success("Your node is running!");
 
       setTimeout(() => {
@@ -55,7 +69,12 @@ function RunNode() {
   const handleSubmit = (evt) => {
     evt.preventDefault();
     setIsModalVisible(true);
-    setValidationMessage("");
+    // setValidationMessage("");
+
+    if (name === "") {
+      setIsModalVisible(false);
+      setNodeNameValidationMessage("Node name can't be empty!");
+    }
   };
 
   const handlePasswd = async (evt) => {
@@ -65,12 +84,26 @@ function RunNode() {
 
     setIsModalVisible(false);
     localStorage.setItem("nodename", name);
-    setIsDone(true);
-  };
+    let status;
+    window.bridge.checkPassword((event, message) => {
+      const data = JSON.parse(message);
+      setPasswordValidationMessage(data.status);
+      status = data.status;
+    });
+    setLoading(true);
+    setTimeout(() => {
+      if (status === "INVALID") {
+        setIsDone(false);
+      } else {
+        setIsDone(true);
+        setLoadingNode(true);
+      }
+      setLoading(false);
+    }, 5000);
 
-  window.bridge.checkPassword((event, message) => {
-    setValidationMessage(JSON.parse(message));
-  });
+    setName("");
+    setPasswd("");
+  };
 
   window.bridge.status((event, message) => {
     setStatus(JSON.parse(message));
@@ -91,6 +124,7 @@ function RunNode() {
     window.bridge.deleteNode();
     setIsDone(false);
     localStorage.removeItem("loadingNode");
+    message.success("Your node is deleted!");
   };
 
   const handleCancel = () => {
@@ -108,7 +142,18 @@ function RunNode() {
         {!isDone && (
           <>
             <Modal
-              title="Please Enter your password to confirm"
+              className="loading-modal"
+              visible={loading}
+              // onCancel={handleCancel}
+              closable={false}
+            >
+              <div className="loading-modal-container">
+                <Spin />
+                <p>Loading..!</p>
+              </div>
+            </Modal>
+            <Modal
+              title="Enter your computer password to confirm!"
               visible={isModalVisible}
               onCancel={handleCancel}
             >
@@ -116,6 +161,7 @@ function RunNode() {
                 <Form.Item label="">
                   <Input.Password
                     className="password-input"
+                    // className="ant-input funan-input funan-inputMedium"
                     placeholder="input password"
                     iconRender={(visible) =>
                       visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
@@ -129,8 +175,8 @@ function RunNode() {
                   className="ant-form-item-control-input-content"
                 >
                   <Button
-                    className="ant-btn ant-btn-default ant-btn-block 
-                  funan-btn funan-btnPrimary 
+                    className="ant-btn-block 
+                  funan-btnPrimary 
                   funan-btnPrimaryMedium"
                     onClick={handlePasswd}
                   >
@@ -142,7 +188,8 @@ function RunNode() {
 
             <div className="running-node-container">
               <h2>Prepare Selendra on the Mininode</h2>
-              <Card style={{ borderRadius: "8px", marginTop: 20 }}>
+
+              <Card.Auto style={{ borderRadius: "8px", marginTop: 20 }}>
                 <Form layout="vertical" size="large">
                   <Form.Item label="Name your node">
                     <Input
@@ -152,34 +199,42 @@ function RunNode() {
                       onChange={(e) => setName(e.target.value)}
                     />
                   </Form.Item>
-                  {validationMessage && (
-                    <Alert message="Incorrect Password" type="error" showIcon />
+                  {passwordValidationMessage && (
+                    <Alert
+                      message="Incorrect Password!"
+                      type="error"
+                      showIcon
+                    />
+                  )}
+                  {nodeNameValidationMessage && (
+                    <Alert
+                      message="Node's name can not be empty!"
+                      type="error"
+                      showIcon
+                    />
                   )}
                   <Form.Item className="ant-form-item-control-input-content">
                     <Button
-                      className="ant-btn ant-btn-default ant-btn-block 
-                   funan-btn funan-btnPrimary 
-                   funan-btnPrimaryMedium"
+                      className="ant-btn-block funan-btnPrimary funan-btnPrimaryMedium"
                       onClick={handleSubmit}
                     >
                       Run Node
                     </Button>
                   </Form.Item>
                 </Form>
-              </Card>
+              </Card.Auto>
             </div>
           </>
         )}
         {isDone && (
           <div>
             <div className="running-node-container">
-              {/* {message.success("This is a success message")} */}
               <h2>Running the Mininode</h2>
-              <Card className="running-node-card">
-                <p>My Node</p>
+              <p className="my-node-title">My Node</p>
+              <Card.Auto className="running-node-card">
                 <div className="running-node-box">
-                  <p>
-                    <strong>{localStorage.getItem("nodename")}</strong>
+                  <p className="node-name">
+                    {localStorage.getItem("nodename")}
                   </p>
                   {loadingNode ? (
                     <div style={{ display: "flex" }}>
@@ -199,7 +254,7 @@ function RunNode() {
                             onClick={stopRunningNode}
                           >
                             <div className="stop_icon"></div>
-                            <p>Stop Running</p>
+                            <p className="text">Stop Running</p>
                           </div>
                         </>
                       ) : (
@@ -216,17 +271,18 @@ function RunNode() {
                           </div>
                         </>
                       )}
-
-                      <a
-                        href="https://telemetry.polkadot.io/#list/0x3d7efe9e36b20531f2a735feac13f3cad96798b2d9036a6950dac8076c19c545"
-                        target="_blank"
-                      >
-                        {/* <img src={sel} width="auto" height="30px" /> */}
-                      </a>
+                      <Popover content="Node's Details">
+                        <a
+                          href="https://telemetry.polkadot.io/#list/0x779c945be9025d1fc27e7fc0235ff4f1b062c93e2c455f3e0d4f919d12f8c817"
+                          target="_blank"
+                        >
+                          <img src={sel} width="auto" height="30px" />
+                        </a>
+                      </Popover>
                     </div>
                   )}
                 </div>
-              </Card>
+              </Card.Auto>
               <Button
                 style={{
                   marginTop: "10px",
@@ -239,7 +295,7 @@ function RunNode() {
               </Button>
             </div>
 
-            <Card className="running-node-card">
+            <Card.Auto className="running-node-card">
               <Button
                 onClick={() => {
                   window.bridge.getSessionKey("hi");
@@ -256,7 +312,7 @@ function RunNode() {
                       className="copy-icon"
                       onClick={() => {
                         navigator.clipboard.writeText(sessionKey);
-                        message.success("Copied to clipboard!");
+                        message.success("Session key copied!!");
                       }}
                     />
                     <CloseOutlined
@@ -267,7 +323,7 @@ function RunNode() {
                   </div>
                 </div>
               )}
-            </Card>
+            </Card.Auto>
             <div style={{ marginTop: "40px" }}>
               <Button className="secondary-btn" onClick={() => deleteNode()}>
                 Delete Node

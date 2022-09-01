@@ -211,11 +211,18 @@ html[data-theme='light'] {
 }
 .funan-btnPrimary:hover,
 .funan-btnPrimary:focus {
-  color: #f5f5f5;
+  color: #f5f5f5 !important;
   background-color: var(--primary);
   /* background: linear-gradient(135deg, #13f1fc 0%, #0470dc 100%); */
   filter: brightness(1.1);
   -webkit-filter: brightness(1.1);
+}
+.funan-btnPrimary> span {
+  color: white !important;
+  font-weight: 500 !important;
+}
+.funan-btnPrimary:hover > span {
+  color: black !important;
 }
 .funan-btnSecondary:hover,
 .funan-btnSecondary:focus {
@@ -359,7 +366,7 @@ html[data-theme='light'] {
   font-size: 16px !important;
   box-shadow: rgba(0, 0, 0, 0.062) 0px 1px 3px 0px,
     rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
-  /* background: var(--primary-gradient) !important; */
+  background: red !important;
   backdrop-filter: blur(60px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(60px) saturate(180%) !important;
   border: 0px !important;
@@ -370,6 +377,9 @@ html[data-theme='light'] {
     rgba(243, 119, 71, 0) 66.12%
   ) !important;
   z-index: 0;
+}
+.test {
+  background-color: red !important;
 }
 .funan-card-auto,
 .funan-card-auto-reverse {
@@ -385,7 +395,12 @@ html[data-theme='light'] {
   z-index: -1;
   width: calc(100% - 1px);
   height: calc(100% - 1px);
-  background: var(--card-background) !important;
+  /* background: var(--card-background) !important; */
+  background: linear-gradient(
+    229.92deg,
+    #ffdfd3 1.72%,
+    #fff6f3 15.71%,
+    #ffffff 99.07%);
   border-radius: 16px;
   color: #000 !important;
 }

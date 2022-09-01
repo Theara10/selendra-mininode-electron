@@ -9,7 +9,7 @@ function child() {
     `echo ${passwd}| sudo -S -k true &>/dev/null && echo true || echo false`,
     (err, stdout, stderr) => {
       console.log(`error1: ${err}`);
-      console.log(`stdout: ${typeof stdout}`);
+      console.log(`stdout: ${stdout}`);
       console.log(`stderr: ${stderr}`);
 
       if (stdout.includes("false")) {

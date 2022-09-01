@@ -3,9 +3,6 @@
   /* background-color: var(--bg-color); */
   height: 100vh;
 }
-p {
-  margin: 0px !important;
-}
 
 :root {
   --main-color:#f37747 !important;
@@ -17,36 +14,39 @@ p {
     rgba(250, 245, 255, 0.38) 46.35%,
     rgba(255, 255, 255, 0.71) 100%
   );
+  --text-color: #22272e;
 }
-
 
 .stop-node {
   display: flex;
   justify-content: space-between;
 }   
+.ant-input-lg {
+  background-color: #f0f2f5 !important;
+}
+
+.ant-alert {
+  margin-bottom: 20px !important;
+}
+.loading-modal {
+  text-align: center !important;
+  height: 200px !important;
+}
+.loading-modal-container {
+  height: 200px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  /* width: 200px !important; */
+}
 
 /* ==========SIDEBAR========= */
 
-.wrapper {
-  margin-left: 250px;
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  /* background: linear-gradient(135deg, #13f1fc 0%, #0470dc 100%) !important; */
-  animation: gradient 15s ease infinite;
-  /* background-color: var(--bg-color) !important; */
+.bitriel-logo-container {
+  background-color: white !important;
 }
-.container {
-  max-width: 60rem !important;
-  margin: 0 auto !important;
-}
-.wrapper .wrapper-sub-background {
-  min-height: 100vh;
-  padding: 50px 0;
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  animation: gradient 15s ease infinite;
-  /* background-color: rgb(231, 231, 231) !important */
-}
+
 .sidebar-sider .ant-layout-sider-children,
 .sidebar-menu {
   background-color: white !important;
@@ -57,9 +57,7 @@ p {
   transform: translateY(-50%) !important;
 }
 
-.ant-row {
-  background-color: white !important;
-}
+/* logo color*/
 
 .sidebar-icon {
   filter: grayscale(100%);
@@ -67,7 +65,6 @@ p {
 
 .ant-menu-item .ant-menu-item-selected > img{
   filter: grayscale(100%) !important;
- 
 }
 
 .password-input {
@@ -75,9 +72,26 @@ p {
   border: 1px solid lightgrey !important;
   /* background-color: red !important; */
 }
-/* ----------Running node -------- */
+
+.my-node-title {
+  margin: 30px 0 10px 0 !important;
+  color: var(--text-gray) !important;
+  
+}
+
+.ant-form-item-control-input-content {
+  background: transparent !important;
+}
+
+/* =========RUNNING NODE=========*/
+
 .running-node-container {
   padding-top: 20px;
+}
+.node-name {
+  font-weight: 500;
+  font-size: 20px;
+  color: #2a2a2a !important;
 }
 .running-node-box {
   background-color: vsar(--bg-color);
@@ -86,8 +100,8 @@ p {
   align-items: center ;
   border-radius: 16px;
   width: 100%;  
-  padding: 10px 20px;
- margin-top: 10px;
+  padding: 10px 0;
+  
 }
 .running-node-box-right {
   display: flex;
@@ -109,12 +123,15 @@ p {
   margin-right: 30px;
  
 }
-
+.running-node-button > p {
+  font-size: 14px !important;
+}
 .secondary-btn, .ant-btn.ant-btn-default {
   padding: 5px 10px;
   border-radius: 10px;
   cursor: pointer;
   border: 1px solid lightgray;
+  color: var(--text-gray) !important;
 }
 .ant-btn.ant-btn-default:hover , .running-node-button:hover{
   color: var(--main-color) !important;
@@ -136,6 +153,10 @@ p {
 }
 .node-status {
   margin-right: 20px !important;
+  
+}
+.node-status > p{
+  font-size: 14px !important;
   
 }
 .node-active {
@@ -193,7 +214,9 @@ p {
   border-radius: 16px !important;
   margin-top: 10px !important;
 }
-
+.ant-card-body {
+  padding: 16px 24px !important
+}
 /* ========ANT ALERT======== */
 .ant-alert {
   border-radius: 10px !important;
@@ -229,7 +252,7 @@ h6,
 p,
 label,
 i {
-  color: var(--text-color) !important;
+  color: var(--text-gray) !important;
   margin: 0 !important;
 }
 
@@ -401,12 +424,18 @@ i {
 }
 .wrapper .wrapper-sub-background {
   min-height: 100vh;
-  padding: 50px 0;
+  /* padding: 50px 0; */
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
   animation: gradient 15s ease infinite;
   /* background-color: #f0f2f5; */
 }
+
+.container {
+  max-width: 60rem !important;
+  margin: 0 auto !important;
+}
+
 .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
   background: var(--menu-gradient) !important;
 }
@@ -422,7 +451,7 @@ i {
 } */
 
 /* .sidebar-sider .ant-layout-sider-children {
-  border-radius: 0 30px 30px 0 !important;
+  borde r-radius: 0 30px 30px 0 !important;
 } */
 .sidebar-sider .ant-layout-sider-children,
 .sidebar-menu {

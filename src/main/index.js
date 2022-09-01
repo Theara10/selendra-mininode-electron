@@ -1,10 +1,16 @@
 import os from "os";
 import { join } from "path";
-// import "./samples/electron-store";
-// import { app, BrowserWindow, ipcMain } from "electron";
 const { fork, execSync, exec } = require("child_process");
-const { app, BrowserWindow, ipcMain, webContents } = require("electron");
+const {
+  app,
+  BrowserWindow,
+  ipcMain,
+  webContents,
+  nativeImage,
+} = require("electron");
 const path = require("path");
+// const icon = require("../renderer/public/images/bitriel-logo.ico");
+import icon from "../renderer/public/images/logo.jpg";
 
 if (!app.requestSingleInstanceLock()) {
   app.quit();
@@ -24,7 +30,7 @@ async function createWindow() {
     webPreferences: {
       preload: join(__dirname, "../preload/index.cjs"),
     },
-    icon: join(__dirname, "../renderer/public/images/bitriel-logo.ico"),
+    icon: nativeImage.createFromDataURL(icon),
     show: false,
     unsafeEval: false,
   });
