@@ -9,7 +9,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" exact element={<RunNode />} />
-        <Route path="/runnode" exact element={<RunNode />} />
+        {/* <Route path="/runnode" exact element={<RunNode />} /> */}
         <Route path="/coming" exact element={<Home />} />
       </Routes>
     </Router>

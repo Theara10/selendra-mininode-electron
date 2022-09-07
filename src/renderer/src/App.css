@@ -1,5 +1,5 @@
 .App {
-  padding: 0  20px 0 20px;
+  padding: 0  50px 0 50px;
   /* background-color: var(--bg-color); */
   height: 100vh;
 }
@@ -39,6 +39,10 @@
   align-items: center;
   flex-direction: column;
   /* width: 200px !important; */
+}
+
+.validation-message {
+  margin-top: 20px;
 }
 
 /* ==========SIDEBAR========= */

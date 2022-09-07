@@ -11,6 +11,7 @@ const {
 const path = require("path");
 // const icon = require("../renderer/public/images/bitriel-logo.ico");
 import icon from "../renderer/public/images/logo.jpg";
+const storage = require("node-persist");
 
 if (!app.requestSingleInstanceLock()) {
   app.quit();
@@ -59,6 +60,8 @@ app.whenReady().then(createWindow);
 //recieve node's name from input
 ipcMain.on("node", async (event, args) => {
   nodename = args;
+  await storage.init(/* options ... */);
+  await storage.setItem("node", args);
 });
 
 ipcMain.on("password", async (event, args) => {
@@ -68,6 +71,7 @@ ipcMain.on("password", async (event, args) => {
   child.on("error", (err) => {
     console.log(err);
   });
+
   child.on("message", function (message) {
     const res = JSON.parse(message);
     const status1 = { status: "UPDATE", message: "Updating System" };
@@ -81,19 +85,106 @@ ipcMain.on("password", async (event, args) => {
       win.webContents.send("status", JSON.stringify(status2));
     } else if (res.status == "INVALID") {
       win.webContents.send("checkPassword", JSON.stringify(status4));
+    } else if (res.status === "CONTAINER") {
+      // async function abc() {
+      //   await storage.init(/* options ... */);
+      //   await storage.setItem("name", res.container);
+      //   console.log("Main: ", await storage.getItem("name")); // yourname
+      // }
+      // abc();
     } else {
       win.webContents.send("status", JSON.stringify(status3));
     }
   });
 });
 
-ipcMain.on("stop", (event, args) => {
-  execSync("docker stop sel-container");
+ipcMain.on("exist", async () => {
+  exec(`echo 234 | sudo -S ./nodemgr list`, (err, stdout, stderr) => {
+    console.log(`error1: ${err}`);
+    console.log(`stdout1: ${stdout.length}`);
+    console.log(`stderr1: ${stderr}`);
+
+    if (stdout.length <= 1) {
+      win.webContents.send("exist", "false");
+      console.log("no exist");
+    } else {
+      win.webContents.send("exist", "true");
+      console.log("exist");
+    }
+  });
 });
 
-ipcMain.on("restart", (event, args) => {
-  execSync("docker start sel-container");
+// systemctl is-active --quiet selendra.theara_node && echo Service is running
+// docker inspect --format '{{json .State.Running}}' sel-containervlejt
+ipcMain.on("nodeActiveStatus", async (event, args) => {
+  await storage.init();
+  const node = await storage.getItem("node");
+  exec(
+    `systemctl is-active --quiet ${"selendra." + node} && echo true`,
+    (err, stdout, stderr) => {
+      console.log(`error1: ${err}`);
+      console.log(`stdout1: ${stdout}`);
+      console.log(`stderr1: ${stderr}`);
+
+      if (stdout.includes("true")) {
+        win.webContents.send("active", stdout);
+      }
+      if (stdout.includes("false")) {
+        win.webContents.send("active", stdout);
+      }
+    }
+  );
 });
+
+ipcMain.on("stop", async (event, args) => {
+  exec(
+    `echo ${args}| sudo -S -k true &>/dev/null && echo true || echo false`,
+    async (err, stdout, stderr) => {
+      console.log(`error1: ${err}`);
+      console.log(`stdout: ${stdout}`);
+      console.log(`stderr: ${stderr}`);
+
+      if (stdout.includes("false")) {
+        const invalid = { status: "INVALID" };
+        win.webContents.send("checkPassword", JSON.stringify(invalid));
+      }
+
+      if (stdout.includes("true")) {
+        execSync(`echo ${args} | sudo -S ./nodemgr stop`);
+      }
+    }
+  );
+});
+
+ipcMain.on("restart", async (event, args) => {
+  exec(
+    `echo ${args}| sudo -S -k true &>/dev/null && echo true || echo false`,
+    async (err, stdout, stderr) => {
+      console.log(`error1: ${err}`);
+      console.log(`stdout: ${stdout}`);
+      console.log(`stderr: ${stderr}`);
+
+      if (stdout.includes("false")) {
+        const invalid = { status: "INVALID" };
+        win.webContents.send("checkPassword", JSON.stringify(invalid));
+      }
+
+      if (stdout.includes("true")) {
+        execSync(`echo ${args} | sudo -S ./nodemgr start`);
+      }
+    }
+  );
+});
+
+// ipcMain.on("stop", async (event, args) => {
+//   const CONTAINER_NAME = await storage.getItem("name");
+//   execSync(`docker stop ${CONTAINER_NAME}`);
+// });
+
+// ipcMain.on("restart", async (event, args) => {
+//   const CONTAINER_NAME = await storage.getItem("name");
+//   execSync(`docker start ${CONTAINER_NAME}`);
+// });
 
 ipcMain.on("session-key", (event, args) => {
   console.log(args);
@@ -112,34 +203,42 @@ ipcMain.on("session-key", (event, args) => {
   );
 });
 
-ipcMain.on("autostart", (event, args) => {
-  console.log("autostart docker");
-  exec("docker update --restart always sel-container");
-});
+// ipcMain.on("autostart", async (event, args) => {
+//   const CONTAINER_NAME = await storage.getItem("name");
+//   console.log("autostart docker");
+//   exec(`docker update --restart always ${CONTAINER_NAME}`);
+// });
 
-ipcMain.on("deleteNode", (event, args) => {
-  const CONTAINER_NAME = "sel-container";
-  exec(`docker container rm -f sel-container`);
-  console.log("deletenode");
-});
-
-ipcMain.on("nodeActiveStatus", (event, args) => {
+ipcMain.on("deleteNode", async (event, args) => {
   exec(
-    `docker inspect --format '{{json .State.Running}}' sel-container`,
-    (err, stdout, stderr) => {
-      console.log(`error: ${err}`);
+    `echo ${args}| sudo -S -k true &>/dev/null && echo true || echo false`,
+    async (err, stdout, stderr) => {
+      console.log(`error1: ${err}`);
       console.log(`stdout: ${stdout}`);
       console.log(`stderr: ${stderr}`);
 
-      if (stdout.includes("true")) {
-        win.webContents.send("active", stdout);
-      }
       if (stdout.includes("false")) {
-        win.webContents.send("active", stdout);
+        const invalid = { status: "INVALID" };
+        win.webContents.send("checkPassword", JSON.stringify(invalid));
+      }
+
+      if (stdout.includes("true")) {
+        await storage.init();
+        const node = await storage.getItem("node");
+        console.log("node:", node);
+        exec(`echo ${args} | sudo -S nodemgr remove --name=${node}`);
+        console.log("deletenode");
       }
     }
   );
 });
+
+//delete node docker
+// ipcMain.on("deleteNode", async (event, args) => {
+//   const CONTAINER_NAME = await storage.getItem("name");
+//   exec(`docker container rm -f ${CONTAINER_NAME}`);
+//   console.log("deletenode");
+// });
 
 app.on("window-all-closed", () => {
   win = null;

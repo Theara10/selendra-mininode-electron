@@ -25,46 +25,61 @@ import Card from "../components/Card";
 function RunNode() {
   const [name, setName] = useState("");
   const [passwd, setPasswd] = useState("");
+  const [confirmPasswd, setConfirmPasswd] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modal, setModal] = useState(false);
   const [passwordValidationMessage, setPasswordValidationMessage] =
     useState("");
   const [nodeNameValidationMessage, setNodeNameValidationMessage] =
     useState("");
   const [status, setStatus] = useState("");
   const [isDone, setIsDone] = useState();
-  const [stopNode, setStopNode] = useState(true);
+  const [stopNode, setStopNode] = useState();
   const [sessionKey, setSessionKey] = useState("");
   const [loadingNode, setLoadingNode] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const [stopNodeModal, setStopNodeModal] = useState(false);
+  const [restartNodeModal, setRestartNodeModal] = useState(false);
+
+  const [deleteNodePasswdValid, setDeleteNodePasswdValid] = useState(false);
+  const [stopNodePasswdValid, setStopNodePasswdValid] = useState(false);
+
   const checkContainerStatus = useCallback(() => {}, [isDone, loadingNode]);
 
+  // check if node exists
   useEffect(() => {
+    window.bridge.getNodeExistStatus((event, args) => {
+      var isTrue = JSON.parse(args);
+      console.log("exist:", isTrue);
+      setIsDone(isTrue);
+    });
     window.bridge.getNodeActiveStatus((event, args) => {
       var isTrue = JSON.parse(args);
-      setIsDone(isTrue);
-      // setLoadingNode(localStorage.getItem("loadingNode"));
+      setStopNode(isTrue);
     });
-  }, [setIsDone, setLoadingNode]);
+  }, [setIsDone, setStopNode]);
 
   useEffect(() => {
     if (typeof isDone === "undefined") {
-      // checkContainerStatus();
+      window.bridge.checkIfNodeExist();
+    }
+    if (typeof stopNode === "undefined") {
       window.bridge.checkNodeActiveStatus();
     }
-  }, [isDone]);
+  });
 
-  useEffect(() => {
-    if (status.status === "RUNNING") {
-      setLoadingNode(false);
-      // localStorage.setItem("loadingNode", false);
-      message.success("Your node is running!");
+  // useEffect(() => {
+  //   if (status.status === "RUNNING") {
+  //     setLoadingNode(false);
+  //     // localStorage.setItem("loadingNode", false);
+  //     message.success("Your node is running!");
 
-      setTimeout(() => {
-        window.bridge.autoStartContainer();
-      }, 10000);
-    }
-  }, [status.status]);
+  //     setTimeout(() => {
+  //       window.bridge.autoStartContainer();
+  //     }, 10000);
+  //   }
+  // }, [status.status]);
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
@@ -94,37 +109,104 @@ function RunNode() {
     setTimeout(() => {
       if (status === "INVALID") {
         setIsDone(false);
+        setLoading(false);
       } else {
         setIsDone(true);
-        setLoadingNode(true);
+        setLoading(false);
+        setPasswd("");
+        setConfirmPasswd("");
       }
-      setLoading(false);
     }, 5000);
-
-    setName("");
-    setPasswd("");
   };
 
   window.bridge.status((event, message) => {
     setStatus(JSON.parse(message));
   });
 
+  // ------Start/Stop/Delete node------
+
   const stopRunningNode = () => {
-    window.bridge.stopNode();
-    setStopNode(!stopNode);
+    setStopNodeModal(true);
+  };
+
+  const confirmStopNode = () => {
+    window.bridge.stopNode(confirmPasswd);
+
+    setStopNodeModal(false);
+    let stopStatus;
+    window.bridge.checkPassword((event, message) => {
+      const data = JSON.parse(message);
+      stopStatus = data.status;
+    });
+    setLoading(true);
+
+    setTimeout(() => {
+      if (stopStatus === "INVALID") {
+        setStopNodePasswdValid(true);
+        setLoading(false);
+      } else {
+        setStopNode(false);
+        setLoading(false);
+        setConfirmPasswd("");
+      }
+    }, 5000);
   };
 
   const restartNode = () => {
-    window.bridge.restartNode();
-    setStopNode(!stopNode);
+    setRestartNodeModal(true);
+  };
+
+  const confirmRestartNode = () => {
+    window.bridge.restartNode(confirmPasswd);
+
+    let restartStatus;
+    window.bridge.checkPassword((event, message) => {
+      const data = JSON.parse(message);
+      restartStatus = data.status;
+    });
+    setRestartNodeModal(false);
+    setLoading(true);
+
+    setTimeout(() => {
+      if (restartStatus === "INVALID") {
+        setStopNodePasswdValid(true);
+        setLoading(false);
+      } else {
+        setStopNode(true);
+        setLoading(false);
+        setConfirmPasswd("");
+      }
+    }, 5000);
   };
 
   const deleteNode = () => {
-    localStorage.setItem("isDone", false);
-    window.bridge.deleteNode();
-    setIsDone(false);
-    localStorage.removeItem("loadingNode");
-    message.success("Your node is deleted!");
+    setModal(true);
+  };
+
+  const confirmDeleteNode = (evt) => {
+    evt.preventDefault();
+    window.bridge.deleteNode(confirmPasswd);
+    let a;
+    window.bridge.checkPassword((event, message) => {
+      const data = JSON.parse(message);
+      a = data.status;
+    });
+    setModal(false);
+    setLoading(true);
+    setTimeout(() => {
+      if (a === "INVALID") {
+        setIsDone(true);
+        setDeleteNodePasswdValid(true);
+        setLoading(false);
+      } else {
+        setIsDone(false);
+        setModal(false);
+        localStorage.setItem("isDone", false);
+        setLoading(false);
+        setConfirmPasswd("");
+        message.success("Your node is deleted!");
+      }
+    }, 5000);
   };
 
   const handleCancel = () => {
@@ -161,7 +243,6 @@ function RunNode() {
                 <Form.Item label="">
                   <Input.Password
                     className="password-input"
-                    // className="ant-input funan-input funan-inputMedium"
                     placeholder="input password"
                     iconRender={(visible) =>
                       visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
@@ -227,7 +308,105 @@ function RunNode() {
           </>
         )}
         {isDone && (
-          <div>
+          <>
+            <Modal
+              className="loading-modal"
+              visible={loading}
+              // onCancel={handleCancel}
+              closable={false}
+            >
+              <div className="loading-modal-container">
+                <Spin />
+                <p>Loading..!</p>
+              </div>
+            </Modal>
+            <Modal
+              title="Confirm Stop Node!"
+              visible={stopNodeModal}
+              onCancel={() => setStopNodeModal(false)}
+            >
+              <Form layout="vertical" size="small">
+                <Form.Item label="">
+                  <Input.Password
+                    className="password-input"
+                    placeholder="input password"
+                    iconRender={(visible) =>
+                      visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                    }
+                    value={confirmPasswd}
+                    onChange={(e) => setConfirmPasswd(e.target.value)}
+                  />
+                </Form.Item>
+                <Form.Item className="ant-form-item-control-input-content">
+                  <Button
+                    className="ant-btn-block 
+                  funan-btnPrimary 
+                  funan-btnPrimaryMedium"
+                    onClick={confirmStopNode}
+                  >
+                    Confirm
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Modal>
+            <Modal
+              title="Confirm Delete Node!"
+              visible={restartNodeModal}
+              onCancel={() => setRestartNodeModal(false)}
+            >
+              <Form layout="vertical" size="small">
+                <Form.Item label="">
+                  <Input.Password
+                    className="password-input"
+                    iconRender={(visible) =>
+                      visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                    }
+                    placeholder="password"
+                    value={confirmPasswd}
+                    onChange={(e) => setConfirmPasswd(e.target.value)}
+                  />
+                </Form.Item>
+                <Form.Item>
+                  <Button
+                    className="ant-btn-block 
+                  funan-btnPrimary 
+                  funan-btnPrimaryMedium"
+                    onClick={confirmRestartNode}
+                  >
+                    Confirm
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Modal>
+            <Modal
+              title="Confirm Delete Node!"
+              visible={modal}
+              onCancel={() => setModal(false)}
+            >
+              <Form layout="vertical" size="small">
+                <Form.Item label="">
+                  <Input.Password
+                    className="password-input"
+                    iconRender={(visible) =>
+                      visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                    }
+                    placeholder="password"
+                    value={confirmPasswd}
+                    onChange={(e) => setConfirmPasswd(e.target.value)}
+                  />
+                </Form.Item>
+                <Form.Item>
+                  <Button
+                    className="ant-btn-block 
+                  funan-btnPrimary 
+                  funan-btnPrimaryMedium"
+                    onClick={confirmDeleteNode}
+                  >
+                    Confirm
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Modal>
             <div className="running-node-container">
               <h2>Running the Mininode</h2>
               <p className="my-node-title">My Node</p>
@@ -236,53 +415,52 @@ function RunNode() {
                   <p className="node-name">
                     {localStorage.getItem("nodename")}
                   </p>
-                  {loadingNode ? (
-                    <div style={{ display: "flex" }}>
-                      <Spin style={{ marginRight: "10px" }} />
-                      <p>Preparing your node!</p>
-                    </div>
-                  ) : (
-                    //running node box
-                    <div className="running-node-box-right">
-                      {stopNode ? (
-                        <>
-                          <div className="node-status">
-                            <p className="node-active">Active</p>
-                          </div>
-                          <div
-                            className="running-node-button secondary-btn"
-                            onClick={stopRunningNode}
-                          >
-                            <div className="stop_icon"></div>
-                            <p className="text">Stop Running</p>
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <div className="node-status">
-                            <p className="node-inactive">Inactive</p>
-                          </div>
-                          <div
-                            className="running-node-button secondary-btn"
-                            onClick={restartNode}
-                          >
-                            <div className="stop_icon"></div>
-                            <p>Restart Node</p>
-                          </div>
-                        </>
-                      )}
-                      <Popover content="Node's Details">
-                        <a
-                          href="https://telemetry.polkadot.io/#list/0x779c945be9025d1fc27e7fc0235ff4f1b062c93e2c455f3e0d4f919d12f8c817"
-                          target="_blank"
+
+                  <div className="running-node-box-right">
+                    {stopNode ? (
+                      <>
+                        <div className="node-status">
+                          <p className="node-active">Active</p>
+                        </div>
+                        <div
+                          className="running-node-button secondary-btn"
+                          onClick={stopRunningNode}
                         >
-                          <img src={sel} width="auto" height="30px" />
-                        </a>
-                      </Popover>
-                    </div>
-                  )}
+                          <div className="stop_icon"></div>
+                          <p className="text">Stop Running</p>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="node-status">
+                          <p className="node-inactive">Inactive</p>
+                        </div>
+                        <div
+                          className="running-node-button secondary-btn"
+                          onClick={restartNode}
+                        >
+                          <div className="stop_icon"></div>
+                          <p>Restart Node</p>
+                        </div>
+                      </>
+                    )}
+
+                    <Popover content="Node's Details">
+                      <a
+                        href="https://telemetry.polkadot.io/#list/0x779c945be9025d1fc27e7fc0235ff4f1b062c93e2c455f3e0d4f919d12f8c817"
+                        target="_blank"
+                      >
+                        <img src={sel} width="auto" height="30px" />
+                      </a>
+                    </Popover>
+                  </div>
                 </div>
               </Card.Auto>
+              <div className="validation-message">
+                {stopNodePasswdValid && (
+                  <Alert message="Incorrect Password!" type="error" showIcon />
+                )}
+              </div>
               <Button
                 style={{
                   marginTop: "10px",
@@ -329,7 +507,12 @@ function RunNode() {
                 Delete Node
               </Button>
             </div>
-          </div>
+            <div className="validation-message">
+              {deleteNodePasswdValid && (
+                <Alert message="Incorrect Password!" type="error" showIcon />
+              )}
+            </div>
+          </>
         )}
       </div>
     </LayoutComponent>

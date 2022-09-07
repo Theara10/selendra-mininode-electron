@@ -38,6 +38,8 @@ contextBridge.exposeInMainWorld("bridge", {
   deleteNode: (args) => ipcRenderer.send("deleteNode", args),
   checkNodeActiveStatus: (args) => ipcRenderer.send("nodeActiveStatus", args),
   getNodeActiveStatus: (args) => ipcRenderer.on("active", args),
+  checkIfNodeExist: () => ipcRenderer.send("exist"),
+  getNodeExistStatus: (args) => ipcRenderer.on("exist", args),
 });
 
 // `exposeInMainWorld` can not detect `prototype` attribute and methods, manually patch it.
