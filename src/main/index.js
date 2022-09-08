@@ -60,11 +60,13 @@ app.whenReady().then(createWindow);
 //recieve node's name from input
 ipcMain.on("node", async (event, args) => {
   nodename = args;
-  await storage.init(/* options ... */);
+  await storage.init();
   await storage.setItem("node", args);
 });
 
 ipcMain.on("password", async (event, args) => {
+  await storage.init();
+  await storage.setItem("pass", args);
   password = args;
   const path_module = join(__dirname, "./child.js");
   const child = await fork(path_module, [password, nodename]);
@@ -104,7 +106,7 @@ ipcMain.on("exist", async () => {
     console.log(`stdout1: ${stdout.length}`);
     console.log(`stderr1: ${stderr}`);
 
-    if (stdout.length <= 1) {
+    if (stdout.length <= 1 || stdout.length >= 49) {
       win.webContents.send("exist", "false");
       console.log("no exist");
     } else {
@@ -120,7 +122,9 @@ ipcMain.on("nodeActiveStatus", async (event, args) => {
   await storage.init();
   const node = await storage.getItem("node");
   exec(
-    `systemctl is-active --quiet ${"selendra." + node} && echo true`,
+    `systemctl is-active --quiet ${
+      "selendra." + node
+    } && echo true || echo false`,
     (err, stdout, stderr) => {
       console.log(`error1: ${err}`);
       console.log(`stdout1: ${stdout}`);
@@ -226,7 +230,7 @@ ipcMain.on("deleteNode", async (event, args) => {
         await storage.init();
         const node = await storage.getItem("node");
         console.log("node:", node);
-        exec(`echo ${args} | sudo -S nodemgr remove --name=${node}`);
+        exec(`echo ${args} | sudo -S ./nodemgr remove --name=${node}`);
         console.log("deletenode");
       }
     }

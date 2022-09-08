@@ -36,7 +36,7 @@ function RunNode() {
   const [isDone, setIsDone] = useState();
   const [stopNode, setStopNode] = useState();
   const [sessionKey, setSessionKey] = useState("");
-  const [loadingNode, setLoadingNode] = useState(false);
+  const [loadingNode, setLoadingNode] = useState();
   const [loading, setLoading] = useState(false);
 
   const [stopNodeModal, setStopNodeModal] = useState(false);
@@ -45,23 +45,31 @@ function RunNode() {
   const [deleteNodePasswdValid, setDeleteNodePasswdValid] = useState(false);
   const [stopNodePasswdValid, setStopNodePasswdValid] = useState(false);
 
-  const checkContainerStatus = useCallback(() => {}, [isDone, loadingNode]);
-
-  // check if node exists
   useEffect(() => {
+    // check if node exists
     window.bridge.getNodeExistStatus((event, args) => {
       var isTrue = JSON.parse(args);
       console.log("exist:", isTrue);
       setIsDone(isTrue);
     });
+
+    // check if node is active
     window.bridge.getNodeActiveStatus((event, args) => {
       var isTrue = JSON.parse(args);
       setStopNode(isTrue);
+      console.log("stopnode: ", isTrue);
+      if (isTrue === true) {
+        setLoadingNode(false);
+        console.log("loading node:", loadingNode);
+      } else {
+        setLoadingNode(true);
+      }
     });
   }, [setIsDone, setStopNode]);
 
   useEffect(() => {
     if (typeof isDone === "undefined") {
+      setIsDone(false);
       window.bridge.checkIfNodeExist();
     }
     if (typeof stopNode === "undefined") {
@@ -69,23 +77,17 @@ function RunNode() {
     }
   });
 
-  // useEffect(() => {
-  //   if (status.status === "RUNNING") {
-  //     setLoadingNode(false);
-  //     // localStorage.setItem("loadingNode", false);
-  //     message.success("Your node is running!");
-
-  //     setTimeout(() => {
-  //       window.bridge.autoStartContainer();
-  //     }, 10000);
-  //   }
-  // }, [status.status]);
+  useEffect(() => {
+    if (status.status === "RUNNING") {
+      setLoadingNode(false);
+      setStopNode(true);
+      message.success("Your node is running!");
+    }
+  }, [status.status]);
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
     setIsModalVisible(true);
-    // setValidationMessage("");
-
     if (name === "") {
       setIsModalVisible(false);
       setNodeNameValidationMessage("Node name can't be empty!");
@@ -417,31 +419,47 @@ function RunNode() {
                   </p>
 
                   <div className="running-node-box-right">
-                    {stopNode ? (
+                    {loadingNode && (
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          marginRight: "10px",
+                        }}
+                      >
+                        <Spin style={{ marginRight: "10px" }} />
+                        <p>Downloading...</p>
+                      </div>
+                    )}
+                    {!loadingNode && (
                       <>
-                        <div className="node-status">
-                          <p className="node-active">Active</p>
-                        </div>
-                        <div
-                          className="running-node-button secondary-btn"
-                          onClick={stopRunningNode}
-                        >
-                          <div className="stop_icon"></div>
-                          <p className="text">Stop Running</p>
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="node-status">
-                          <p className="node-inactive">Inactive</p>
-                        </div>
-                        <div
-                          className="running-node-button secondary-btn"
-                          onClick={restartNode}
-                        >
-                          <div className="stop_icon"></div>
-                          <p>Restart Node</p>
-                        </div>
+                        {stopNode ? (
+                          <>
+                            <div className="node-status">
+                              <p className="node-active">Active</p>
+                            </div>
+                            <div
+                              className="running-node-button secondary-btn"
+                              onClick={stopRunningNode}
+                            >
+                              <div className="stop_icon"></div>
+                              <p className="text">Stop Running</p>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div className="node-status">
+                              <p className="node-inactive">Inactive</p>
+                            </div>
+                            <div
+                              className="running-node-button secondary-btn"
+                              onClick={restartNode}
+                            >
+                              <div className="stop_icon"></div>
+                              <p>Restart Node</p>
+                            </div>
+                          </>
+                        )}
                       </>
                     )}
 

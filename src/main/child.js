@@ -37,19 +37,34 @@ function child() {
         // );
         const NODE_NAME = nodename;
 
-        try {
-          // const message1 = { status: "UPDATE" };
-          // process.send(JSON.stringify(message1));
-          // const init = `echo ${passwd} | sudo -S ./nodemgr init`;
-          // execSync(init, { stdio: "inherit" });
+        const start = `echo ${passwd} | sudo -S ./nodemgr add --name=${NODE_NAME} --path=/ --chain=testnet && echo ${passwd} | sudo -S ./nodemgr start`;
+        exec(start, (err, stdout, stderr) => {
+          console.log(`error-mgr: ${err}`);
+          console.log(`stdout: ${stdout}`);
+          console.log(`stdout: ${stdout.length}`);
+          console.log(`stderr: ${stderr}`);
 
-          const message2 = { status: "RUNNING" };
-          process.send(JSON.stringify(message2));
-          const start = `echo ${passwd} | sudo -S ./nodemgr add --name=${NODE_NAME} --path="/home" --chain="testnet" && echo ${passwd} | sudo -S ./nodemgr start`;
-          execSync(start, { stdio: "inherit" });
-        } catch (error) {
-          console.log(`Status Code: ${error.status} with '${error.message}'`);
-        }
+          if (stdout.length >= 49) {
+            try {
+              const message1 = { status: "UPDATE" };
+              process.send(JSON.stringify(message1));
+              console.log(message1);
+              const init = `echo ${passwd} | sudo -S ./nodemgr init`;
+              execSync(init, { stdio: "inherit" });
+
+              const message2 = { status: "RUNNING" };
+              process.send(JSON.stringify(message2));
+              console.log(message2);
+
+              const add = `echo ${passwd} | sudo -S ./nodemgr add --name=${NODE_NAME} --path=/ --chain=testnet && echo ${passwd} | sudo -S ./nodemgr start`;
+              execSync(add, { stdio: "inherit" });
+            } catch (error) {
+              console.log(
+                `Status Code: ${error.status} with '${error.message}'`
+              );
+            }
+          }
+        });
         // try {
         //   const message1 = { status: "UPDATE" };
         //   process.send(JSON.stringify(message1));
